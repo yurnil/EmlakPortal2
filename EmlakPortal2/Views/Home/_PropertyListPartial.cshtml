@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Property>
+
+@foreach (var item in Model)
+{
+    <div class="col-md-4 col-sm-6 mb-4">
+        <div class="card h-100 shadow-sm">
+            @if (item.PropertyImages != null && item.PropertyImages.Count > 0)
+            {
+                <img src="@item.PropertyImages.FirstOrDefault().ImageUrl" class="card-img-top" alt="@item.Title" style="height: 200px; object-fit: cover;">
+            }
+            else
+            {
+                <img src="https://via.placeholder.com/300x200?text=Resim+Yok" class="card-img-top" style="height: 200px; object-fit: cover;">
+            }
+
+            <div class="card-body">
+                <h5 class="card-title">@item.Title</h5>
+                <p class="card-text text-muted">
+                    <i class="bi bi-geo-alt-fill"></i> @item.Address
+                </p>
+                <p class="card-text">
+                    <span class="badge bg-info text-dark">@item.Category.Name</span>
+                    <span class="badge bg-secondary">@item.RoomCount Oda</span>
+                    <span class="badge bg-secondary">@item.Area m²</span>
+                </p>
+                <h6 class="text-primary fw-bold">
+                    @item.Price.ToString("c")
+                </h6>
+            </div>
+            <div class="card-footer bg-white border-top-0">
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary w-100">Detayları Gör</a>
+            </div>
+        </div>
+    </div>
+}

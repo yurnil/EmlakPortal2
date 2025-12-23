@@ -1,0 +1,78 @@
+﻿@model Property
+
+<form method="post" enctype="multipart/form-data">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Yeni İlan Ekle</h2>
+            <hr />
+        </div>
+
+        @* Resim Yükleme Alanı *@
+        <div class="mb-3">
+            <label>İlan Resimleri</label>
+            <input type="file" name="files" class="form-control" multiple />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Title">İlan Başlığı</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description">Açıklama</label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label asp-for="Price">Fiyat (TL)</label>
+                <input asp-for="Price" class="form-control" type="number" />
+            </div>
+            <div class="col-6 mb-3">
+                <label asp-for="RoomCount">Oda Sayısı</label>
+                <input asp-for="RoomCount" class="form-control" type="number" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label asp-for="Area">Metrekare (m²)</label>
+                <input asp-for="Area" class="form-control" type="number" />
+            </div>
+            <div class="col-6 mb-3">
+                <label asp-for="CategoryId">Kategori</label>
+                <select asp-for="CategoryId" asp-items="ViewBag.CategoryList" class="form-select">
+                    <option disabled selected>-- Kategori Seçiniz --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Address">Adres</label>
+            <input asp-for="Address" class="form-control" />
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="IsSold" class="form-check-input" type="checkbox" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+                Satıldı / Kiralandı mı?
+            </label>
+        </div>
+
+        @* Şu an AppUser ID'yi otomatik alamadığımız için (Giriş yapmadık) gizli geçiyoruz *@
+        @* Normalde: User.Identity.GetUserId() kullanılır. Şimdilik boş geçebilir. *@
+
+        <button type="submit" class="btn btn-primary" style="width:150px">Oluştur</button>
+        <a asp-controller="Property" asp-action="Index" class="btn btn-secondary" style="width:150px">
+            Listeye Dön
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

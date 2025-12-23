@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EmlakPortal2</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EmlakPortal2.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EmlakPortal2</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
+                        </li>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-danger fw-bold" asp-area="Admin" asp-controller="Category" asp-action="Index">
+                                    <i class="bi bi-gear-fill"></i> Admin Paneli
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - EmlakPortal2 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    @if (User.IsInRole("Admin"))
+    {
+        <div id="superPanel" style="
+                position: fixed !important;
+                bottom: 20px !important;
+                right: 0px !important;
+                width: 350px !important;
+                height: 450px !important; /* Yükseklik kesinlikle sabit */
+                background-color: white !important;
+                z-index: 999999 !important; /* Her şeyin üstünde */
+                box-shadow: -5px 0 15px rgba(0,0,0,0.3) !important;
+                transition: transform 0.3s ease !important;
+                transform: translateX(0px); /* Başlangıçta açık */
+                border-top-left-radius: 10px;
+                border-bottom-left-radius: 10px;
+                display: block !important;
+            ">
+
+            <button id="superBtn" onclick="toggleSuperPanel()" style="
+                    position: absolute !important;
+                    left: -40px !important; /* Kutunun dışına sol tarafa as */
+                    top: 50% !important;
+                    width: 40px !important;
+                    height: 50px !important;
+                    background-color: #0d6efd !important;
+                    color: white !important;
+                    border: none !important;
+                    cursor: pointer !important;
+                    border-top-left-radius: 10px;
+                    border-bottom-left-radius: 10px;
+                    outline: none !important;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                ">
+                <i id="superIcon" class="bi bi-chevron-double-right" style="font-size: 20px;"></i>
+            </button>
+
+            <div style="
+                    background-color: #0d6efd !important;
+                    color: white !important;
+                    padding: 15px !important;
+                    border-top-left-radius: 10px;
+                    font-weight: bold;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    height: 50px !important;
+                ">
+                <span>Canlı Akış</span>
+                <span id="msgCount" style="background: white; color: #0d6efd; padding: 2px 8px; border-radius: 10px; font-size: 12px;">0</span>
+            </div>
+
+            <div id="scrollArea" style="
+                    height: 400px !important; /* 450 - 50(başlık) = 400px */
+                    overflow-y: scroll !important; /* KAYDIRMA ZORUNLU */
+                    background-color: #f8f9fa !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                ">
+                <ul id="notificationList" class="list-group list-group-flush" style="margin: 0 !important; padding: 0 !important;">
+                    <li class="list-group-item text-center text-muted py-5" style="list-style: none;">
+                        Veri bekleniyor...
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+        <script>
+            // Panel Aç/Kapa
+            function toggleSuperPanel() {
+                var panel = document.getElementById("superPanel");
+                var icon = document.getElementById("superIcon");
+
+                // Mevcut konumu kontrol et
+                if (panel.style.transform === "translateX(0px)" || panel.style.transform === "") {
+                    // Kapat (Sağa ötele)
+                    panel.style.transform = "translateX(350px)";
+                    icon.className = "bi bi-chevron-double-left";
+                } else {
+                    // Aç (Sıfırla)
+                    panel.style.transform = "translateX(0px)";
+                    icon.className = "bi bi-chevron-double-right";
+                }
+            }
+
+            // SignalR Bağlantısı
+            var connection = new signalR.HubConnectionBuilder().withUrl("/general-hub").build();
+
+            connection.on("ReceiveMessage", function (user, message) {
+                var list = document.getElementById("notificationList");
+                var badge = document.getElementById("msgCount");
+
+                // İlk mesajda temizle
+                if (list.innerText.includes("Veri bekleniyor")) {
+                    list.innerHTML = "";
+                }
+
+                var now = new Date();
+                var time = now.getHours() + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+
+                // Yeni eleman oluştur
+                var li = document.createElement("li");
+
+                // Stil ver (Bootstrap class'larına güvenmiyoruz, elle yazıyoruz)
+                li.style.padding = "15px";
+                li.style.borderBottom = "1px solid #dee2e6";
+                li.style.backgroundColor = "white";
+                li.style.listStyle = "none";
+                li.style.display = "block";
+
+                li.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <strong style="color:#0d6efd; font-size:14px;">${user || 'Ziyaretçi'}</strong>
+                        <span style="color:#6c757d; font-size:12px;">${time}</span>
+                    </div>
+                    <div style="color:#212529; font-size:14px;">${message}</div>
+                `;
+
+                // En üste ekle
+                list.prepend(li);
+
+                // Sayacı artır
+                badge.innerText = parseInt(badge.innerText) + 1;
+
+                // Panel kapalıysa butonu kırmızı yapıp uyar
+                var panel = document.getElementById("superPanel");
+                if (panel.style.transform === "translateX(350px)") {
+                    var btn = document.getElementById("superBtn");
+                    btn.style.backgroundColor = "#dc3545";
+                    setTimeout(function() {
+                        btn.style.setProperty("background-color", "#0d6efd", "important");
+                    }, 500);
+                }
+            });
+
+            connection.start().catch(err => console.error(err));
+        </script>
+    }
+
+</body>
+</html>
