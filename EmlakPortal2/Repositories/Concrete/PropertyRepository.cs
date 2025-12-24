@@ -6,16 +6,19 @@ namespace EmlakPortal2.Repositories.Concrete
 {
     public class PropertyRepository : GenericRepository<Property>, IPropertyRepository
     {
-        private readonly ApplicationDbContext _context;
+        private ApplicationDbContext _db;
 
-        public PropertyRepository(ApplicationDbContext context) : base(context)
+        public PropertyRepository(ApplicationDbContext db) : base(db)
         {
-            _context = context;
+            _db = db;
         }
 
         public void Save()
         {
-            _context.SaveChanges();
+            _db.SaveChanges();
         }
+
+        // Update metodu GenericRepository'den geliyor, buraya tekrar yazmıyoruz.
+        // Böylece çakışma olmuyor.
     }
 }

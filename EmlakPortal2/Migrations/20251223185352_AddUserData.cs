@@ -5,7 +5,7 @@
 namespace EmlakPortal2.Migrations
 {
     /// <inheritdoc />
-    public partial class AdSoyadEklendi : Migration
+    public partial class AddUserData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,6 +16,12 @@ namespace EmlakPortal2.Migrations
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "ProfilePictureUrl",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "Surname",
@@ -30,6 +36,10 @@ namespace EmlakPortal2.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Name",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "ProfilePictureUrl",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(

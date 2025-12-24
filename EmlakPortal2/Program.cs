@@ -9,14 +9,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Veritabanı Bağlantısı
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// 2. Identity Ayarları (BİZİM YAZDIĞIMIZ - Scaffolding'in eklediğini sildik)
-// NOT: Scaffolding bazen buraya 'AddDefaultIdentity' ekler, o yüzden hata verir.
-// Biz kendi 'AddIdentity' kodumuzu koruyoruz.
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = false;
@@ -28,20 +24,17 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-// 3. Cookie Ayarları
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Identity/Account/Login"; // Scaffolding sonrası yol değişti!
+    options.LoginPath = "/Identity/Account/Login"; 
     options.LogoutPath = "/Identity/Account/Logout";
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
-// 4. Repository Pattern Tanımları
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// 5. MVC ve Razor Pages Servisleri
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages(); // Login/Register sayfaları için şart
+builder.Services.AddRazorPages(); 
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 

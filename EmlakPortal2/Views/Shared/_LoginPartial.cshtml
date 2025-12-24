@@ -3,46 +3,40 @@
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
-<ul class="navbar-nav align-items-center"> @if (SignInManager.IsSignedIn(User))
-{
-    var user = await UserManager.GetUserAsync(User);
-    var displayName = user != null ? $"{user.Name} {user.Surname}" : User.Identity.Name;
+<ul class="navbar-nav align-items-center">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var user = await UserManager.GetUserAsync(User);
+        var displayName = user != null ? $"{user.Name} {user.Surname}" : User.Identity.Name;
+        // Foto varsa onu kullan, yoksa gri placeholder kullan
+        var profilePhoto = !string.IsNullOrEmpty(user?.ProfilePictureUrl) ? user.ProfilePictureUrl : "https://via.placeholder.com/40?text=U";
 
-    @* 1. HOŞGELDİNİZ YAZISI (Artık Tıklanmaz, Sadece Metin) *@
-    <li class="nav-item me-2">
-        <span class="nav-link text-dark pe-none"> @* pe-none: Tıklamayı engeller *@
-            Hoşgeldiniz, <span class="fw-bold text-primary">@displayName</span>
-        </span>
-    </li>
-    
-    @* 2. AYIRACI ÇİZGİ (Görsellik İçin) *@
-    <li class="nav-item text-muted mx-1">|</li>
+        <li class="nav-item me-2">
+            <span class="nav-link text-dark pe-none">
+                Hoşgeldiniz, <span class="fw-bold text-primary">@displayName</span>
+            </span>
+        </li>
 
-    @* 3. PROFİLİM BUTONU (Yeni ve Tıklanabilir) *@
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Profil Ayarları">
-            <i class="bi bi-person-gear fs-5"></i> Profilim
-        </a>
-    </li>
+        <li class="nav-item text-muted mx-1">|</li>
 
-    @* 4. ÇIKIŞ YAP BUTONU *@
-    <li class="nav-item ms-2">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">
-                <i class="bi bi-box-arrow-right"></i> Çıkış
-            </button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Kayıt Ol</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-primary fw-bold ms-2" asp-area="Identity" asp-page="/Account/Login">
-            <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
-        </a>
-    </li>
-}
+        <li class="nav-item">
+            <a class="nav-link text-dark d-flex align-items-center" asp-area="Identity" asp-page="/Account/Manage/Index" title="Profil Ayarları">
+                <img src="@profilePhoto" class="rounded-circle me-2 border border-2 border-white shadow-sm" style="width: 32px; height: 32px; object-fit: cover;">
+                Profilim
+            </a>
+        </li>
+
+        <li class="nav-item ms-2">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                    <i class="bi bi-box-arrow-right"></i> Çıkış
+                </button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Kayıt Ol</a></li>
+        <li class="nav-item"><a class="nav-link text-primary fw-bold ms-2" asp-area="Identity" asp-page="/Account/Login"><i class="bi bi-box-arrow-in-right"></i> Giriş Yap</a></li>
+    }
 </ul>

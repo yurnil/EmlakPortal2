@@ -26,7 +26,7 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold" asp-area="Admin" asp-controller="Category" asp-action="Index">
+                                <a class="nav-link text-danger fw-bold" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
                                     <i class="bi bi-gear-fill"></i> Admin Paneli
                                 </a>
                             </li>
@@ -58,63 +58,63 @@
     @if (User.IsInRole("Admin"))
     {
         <div id="superPanel" style="
-                position: fixed !important;
-                bottom: 20px !important;
-                right: 0px !important;
-                width: 350px !important;
-                height: 450px !important; /* Yükseklik kesinlikle sabit */
-                background-color: white !important;
-                z-index: 999999 !important; /* Her şeyin üstünde */
-                box-shadow: -5px 0 15px rgba(0,0,0,0.3) !important;
-                transition: transform 0.3s ease !important;
-                transform: translateX(0px); /* Başlangıçta açık */
-                border-top-left-radius: 10px;
-                border-bottom-left-radius: 10px;
-                display: block !important;
-            ">
-
-            <button id="superBtn" onclick="toggleSuperPanel()" style="
-                    position: absolute !important;
-                    left: -40px !important; /* Kutunun dışına sol tarafa as */
-                    top: 50% !important;
-                    width: 40px !important;
-                    height: 50px !important;
-                    background-color: #0d6efd !important;
-                    color: white !important;
-                    border: none !important;
-                    cursor: pointer !important;
+                    position: fixed !important;
+                    bottom: 20px !important;
+                    right: 0px !important;
+                    width: 350px !important;
+                    height: 450px !important;
+                    background-color: white !important;
+                    z-index: 999999 !important;
+                    box-shadow: -5px 0 15px rgba(0,0,0,0.3) !important;
+                    transition: transform 0.3s ease !important;
+                    transform: translateX(350px); /* DÜZELTİLDİ: Başlangıçta KAPALI (350px) */
                     border-top-left-radius: 10px;
                     border-bottom-left-radius: 10px;
-                    outline: none !important;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    display: block !important;
                 ">
-                <i id="superIcon" class="bi bi-chevron-double-right" style="font-size: 20px;"></i>
+
+            <button id="superBtn" onclick="toggleSuperPanel()" style="
+                        position: absolute !important;
+                        left: -40px !important;
+                        top: 50% !important;
+                        width: 40px !important;
+                        height: 50px !important;
+                        background-color: #0d6efd !important;
+                        color: white !important;
+                        border: none !important;
+                        cursor: pointer !important;
+                        border-top-left-radius: 10px;
+                        border-bottom-left-radius: 10px;
+                        outline: none !important;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    ">
+                <i id="superIcon" class="bi bi-chevron-double-left" style="font-size: 20px;"></i>
             </button>
 
             <div style="
-                    background-color: #0d6efd !important;
-                    color: white !important;
-                    padding: 15px !important;
-                    border-top-left-radius: 10px;
-                    font-weight: bold;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    height: 50px !important;
-                ">
+                        background-color: #0d6efd !important;
+                        color: white !important;
+                        padding: 15px !important;
+                        border-top-left-radius: 10px;
+                        font-weight: bold;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        height: 50px !important;
+                    ">
                 <span>Canlı Akış</span>
                 <span id="msgCount" style="background: white; color: #0d6efd; padding: 2px 8px; border-radius: 10px; font-size: 12px;">0</span>
             </div>
 
             <div id="scrollArea" style="
-                    height: 400px !important; /* 450 - 50(başlık) = 400px */
-                    overflow-y: scroll !important; /* KAYDIRMA ZORUNLU */
-                    background-color: #f8f9fa !important;
-                    padding: 0 !important;
-                    margin: 0 !important;
-                ">
+                        height: 400px !important;
+                        overflow-y: scroll !important;
+                        background-color: #f8f9fa !important;
+                        padding: 0 !important;
+                        margin: 0 !important;
+                    ">
                 <ul id="notificationList" class="list-group list-group-flush" style="margin: 0 !important; padding: 0 !important;">
                     <li class="list-group-item text-center text-muted py-5" style="list-style: none;">
                         Veri bekleniyor...
@@ -149,7 +149,7 @@
                 var list = document.getElementById("notificationList");
                 var badge = document.getElementById("msgCount");
 
-                // İlk mesajda temizle
+
                 if (list.innerText.includes("Veri bekleniyor")) {
                     list.innerHTML = "";
                 }
@@ -157,10 +157,9 @@
                 var now = new Date();
                 var time = now.getHours() + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
 
-                // Yeni eleman oluştur
                 var li = document.createElement("li");
 
-                // Stil ver (Bootstrap class'larına güvenmiyoruz, elle yazıyoruz)
+
                 li.style.padding = "15px";
                 li.style.borderBottom = "1px solid #dee2e6";
                 li.style.backgroundColor = "white";
@@ -175,10 +174,9 @@
                     <div style="color:#212529; font-size:14px;">${message}</div>
                 `;
 
-                // En üste ekle
                 list.prepend(li);
 
-                // Sayacı artır
+
                 badge.innerText = parseInt(badge.innerText) + 1;
 
                 // Panel kapalıysa butonu kırmızı yapıp uyar

@@ -33,8 +33,14 @@
                     <td>@obj.RoomCount</td>
                     <td>@(obj.IsSold ? "Satıldı" : "Yayında")</td>
                     <td>
+
                         <div class="w-75 btn-group" role="group">
-                            <a asp-controller="Property" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Sil</a>
+                            <a asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-warning btn-sm text-dark me-2" title="Düzenle">
+                                <i class="bi bi-pencil-square"></i> Düzenle
+                            </a>
+                            <a asp-controller="Property" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger mx-2"> 
+                                <i class="bi bi-trash-fill"></i> Sil
+                                </a>
                         </div>
                     </td>
                 </tr>

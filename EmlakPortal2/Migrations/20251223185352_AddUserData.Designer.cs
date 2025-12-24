@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmlakPortal2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251223172251_AdSoyadEklendi")]
-    partial class AdSoyadEklendi
+    [Migration("20251223185352_AddUserData")]
+    partial class AddUserData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,6 +74,9 @@ namespace EmlakPortal2.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
