@@ -10,7 +10,37 @@
                 <div class="col-md-6 text-center">
                     @if (Model.PropertyImages != null && Model.PropertyImages.Count > 0)
                     {
-                        <img src="@Model.PropertyImages.FirstOrDefault().ImageUrl" class="img-fluid rounded border" alt="@Model.Title" style="max-height: 400px; width: auto;" />
+                        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+
+                            <div class="carousel-indicators">
+                                @for (int i = 0; i < Model.PropertyImages.Count; i++)
+                                {
+                                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="true"></button>
+                                }
+                            </div>
+
+                            <div class="carousel-inner">
+                                @{
+                                    int sayac = 0;
+                                }
+                                @foreach (var img in Model.PropertyImages)
+                                {
+                                    <div class="carousel-item @(sayac == 0 ? "active" : "")">
+                                        <img src="@img.ImageUrl" class="d-block w-100 rounded border" style="height: 400px; object-fit: cover;" alt="@Model.Title">
+                                    </div>
+                                    sayac++;
+                                }
+                            </div>
+
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                                <span class="visually-hidden">Önceki</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                                <span class="visually-hidden">Sonraki</span>
+                            </button>
+                        </div>
                     }
                     else
                     {
@@ -53,8 +83,10 @@
                             </a>
                         </div>
                         <div class="col-12 col-md-6 pb-1">
-                            <a href="#" class="btn btn-success w-100 btn-lg">
-                                <i class="bi bi-whatsapp"></i> İletişime Geç
+                            <a href="https://wa.me/905469105391?text=Merhaba, @Model.Title ilanı hakkında bilgi almak istiyorum."
+                               target="_blank"
+                               class="btn btn-success btn-lg px-4">
+                                <i class="bi bi-whatsapp"></i> WhatsApp ile İletişime Geç
                             </a>
                         </div>
                     </div>

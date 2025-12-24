@@ -1,0 +1,40 @@
+﻿@model Property
+
+<div class="container mt-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-danger text-white text-center">
+            <h3><i class="bi bi-exclamation-triangle-fill"></i> İlanı Silmek İstediğine Emin misin?</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="alert alert-warning text-center">
+                <strong>Dikkat:</strong> Bu işlem geri alınamaz!
+                <br />
+                "@Model.Title" başlıklı ilan kalıcı olarak silinecek.
+            </div>
+
+            <div class="mb-3">
+                <label class="fw-bold">İlan Başlığı</label>
+                <input asp-for="Title" disabled class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="fw-bold">Fiyat</label>
+                <input asp-for="Price" disabled class="form-control" />
+            </div>
+
+            <form method="post" asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+
+                <button type="submit" class="btn btn-danger btn-lg w-100 mb-2">
+                    <i class="bi bi-trash-fill"></i> Evet, İlanı Sil
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary btn-lg w-100">
+                    <i class="bi bi-x-circle"></i> Vazgeç, Listeye Dön
+                </a>
+            </form>
+
+        </div>
+    </div>
+</div>

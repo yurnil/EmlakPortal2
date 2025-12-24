@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.SignalR;
 using EmlakPortal2.Hubs;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmlakPortal2.Controllers
 {
@@ -52,21 +53,20 @@ namespace EmlakPortal2.Controllers
             return PartialView("_PropertyListPartial", propertyList);
         }
 
-        // DETAY SAYFASI
         public IActionResult Details(int id)
         {
             if (id == 0) return NotFound();
 
+            // HATA BURADAYDI: .Include yerine .GetAll içinde týrnakla yazýyoruz.
+            // Hem kategoriyi hem de resimleri ("Category,PropertyImages") getir diyoruz.
             var property = _unitOfWork.Property
-                .GetAll(u => u.Id == id, includeProperties: "Category,PropertyImages")
+                .GetAll(p => p.Id == id, includeProperties: "Category,PropertyImages")
                 .FirstOrDefault();
 
             if (property == null) return NotFound();
 
-            // --- SÝNYAL GÖNDER ---
-            // "ReceiveMessage" adýndaki dinleyiciye mesaj yolluyoruz
-            _hubContext.Clients.All.SendAsync("ReceiveMessage", "Sistem", $"{property.Title} ilanýna biri bakýyor!");
-            // ---------------------
+            // (Eðer SignalR kodlarýn varsa burada durabilir, silmene gerek yok)
+            // _hubContext.Clients.All...
 
             return View(property);
         }
