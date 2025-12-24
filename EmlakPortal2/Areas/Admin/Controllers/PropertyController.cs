@@ -151,6 +151,14 @@ namespace EmlakPortal2.Areas.Admin.Controllers
             dbItem.Description = model.Description;
             dbItem.CategoryId = model.CategoryId;
             dbItem.RoomCount = model.RoomCount;
+            dbItem.IsitmaTipi = model.IsitmaTipi;
+            dbItem.EsyaliMi = model.EsyaliMi;
+            dbItem.BulunduguKat = model.BulunduguKat;
+            dbItem.BinaYasi = model.BinaYasi;
+            dbItem.KatSayisi = model.KatSayisi;
+            dbItem.BalkonSayisi = model.BalkonSayisi;
+            dbItem.KullanimDurumu = model.KullanimDurumu;
+            dbItem.SiteIcerisinde = model.SiteIcerisinde;
             // Metrekare varsa aç: dbItem.SquareMeters = model.SquareMeters;
 
             // 3. BURASI ÇOK ÖNEMLİ!

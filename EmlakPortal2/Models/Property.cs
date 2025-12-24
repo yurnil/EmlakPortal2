@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace EmlakPortal2.Models
 {
     public class Property
@@ -40,5 +41,28 @@ namespace EmlakPortal2.Models
 
         // Bir ilanın birden çok resmi olabilir
         public virtual ICollection<PropertyImage> PropertyImages { get; set; } = new List<PropertyImage>();
+        [Display(Name = "Isıtma Tipi")]
+        public string IsitmaTipi { get; set; } // Örn: Kombi, Merkezi
+
+        [Display(Name = "Eşyalı mı?")]
+        public bool EsyaliMi { get; set; }
+
+        [Display(Name = "Bulunduğu Kat")]
+        public int BulunduguKat { get; set; }
+
+        [Display(Name = "Binanın Yaşı")]
+        public int BinaYasi { get; set; }
+
+        [Display(Name = "Toplam Kat Sayısı")]
+        public int KatSayisi { get; set; }
+
+        [Display(Name = "Balkon Sayısı")]
+        public int BalkonSayisi { get; set; }
+
+        [Display(Name = "Kullanım Durumu")]
+        public string KullanimDurumu { get; set; } // Örn: Boş, Kiracılı
+
+        [Display(Name = "Site İçerisinde mi?")]
+        public bool SiteIcerisinde { get; set; }
     }
 }

@@ -27,6 +27,50 @@
                                 <input asp-for="Price" class="form-control" type="number" />
                                 <span asp-validation-for="Price" class="text-danger"></span>
                             </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="IsitmaTipi" class="form-label">Isıtma Tipi</label>
+                                    <input asp-for="IsitmaTipi" class="form-control" placeholder="Örn: Kombi, Merkezi" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="KullanimDurumu" class="form-label">Kullanım Durumu</label>
+                                    <input asp-for="KullanimDurumu" class="form-control" placeholder="Örn: Boş, Kiracılı" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label asp-for="BinaYasi" class="form-label">Bina Yaşı</label>
+                                    <input asp-for="BinaYasi" type="number" class="form-control" />
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label asp-for="BulunduguKat" class="form-label">Bulunduğu Kat</label>
+                                    <input asp-for="BulunduguKat" type="number" class="form-control" />
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label asp-for="KatSayisi" class="form-label">Kat Sayısı</label>
+                                    <input asp-for="KatSayisi" type="number" class="form-control" />
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label asp-for="BalkonSayisi" class="form-label">Balkon</label>
+                                    <input asp-for="BalkonSayisi" type="number" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" asp-for="EsyaliMi">
+                                        <label class="form-check-label" asp-for="EsyaliMi">Eşyalı mı?</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" asp-for="SiteIcerisinde">
+                                        <label class="form-check-label" asp-for="SiteIcerisinde">Site İçerisinde mi?</label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Kategori</label>
                                 <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">

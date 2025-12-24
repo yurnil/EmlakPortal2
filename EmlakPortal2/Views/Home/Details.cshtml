@@ -75,6 +75,45 @@
                     <p class="card-text text-secondary">
                         @Html.Raw(Model.Description)
                     </p>
+                    <h5 class="mt-4 text-dark border-bottom pb-2">İlan Özellikleri</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><i class="bi bi-building"></i> Bina Yaşı:</span>
+                                    <span class="fw-bold">@Model.BinaYasi</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><i class="bi bi-layers"></i> Kat:</span>
+                                    <span class="fw-bold">@Model.BulunduguKat / @Model.KatSayisi</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><i class="bi bi-grid"></i> Balkon:</span>
+                                    <span class="fw-bold">@Model.BalkonSayisi</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><i class="bi bi-fire"></i> Isıtma:</span>
+                                    <span class="fw-bold">@Model.IsitmaTipi</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><i class="bi bi-person"></i> Durumu:</span>
+                                    <span class="fw-bold">@Model.KullanimDurumu</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><i class="bi bi-lamp"></i> Eşyalı:</span>
+                                    <span class="fw-bold">@(Model.EsyaliMi ? "Evet" : "Hayır")</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><i class="bi bi-houses"></i> Site İçinde:</span>
+                                    <span class="fw-bold">@(Model.SiteIcerisinde ? "Evet" : "Hayır")</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
                     <div class="row mt-4">
                         <div class="col-12 col-md-6 pb-1">
