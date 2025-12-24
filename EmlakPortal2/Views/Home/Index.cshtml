@@ -22,21 +22,17 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            // FİLTRELEME KODLARI (Senin eski kodların)
             $(".filter-btn").click(function () {
-                // Tıklanan kategorinin ID'sini al
                 var catId = $(this).data("id");
-
-                // Görsellik: Tıklanan butonu aktif yap, diğerlerini pasif
                 $(".filter-btn").removeClass("btn-dark").addClass("btn-outline-dark");
                 $(this).removeClass("btn-outline-dark").addClass("btn-dark");
 
-                // AJAX İsteği
                 $.ajax({
                     url: '/Home/FilterProperties',
                     type: 'GET',
                     data: { categoryId: catId },
                     success: function (data) {
-                        // Gelen yeni HTML'i kutunun içine bas
                         $("#propertyListContainer").html(data);
                     },
                     error: function () {
@@ -45,5 +41,37 @@
                 });
             });
         });
+
+        // --- FAVORİ KODU (Global Fonksiyon) ---
+        function toggleFavorite(propertyId, btnElement) {
+
+            // Tıklanma testi
+            console.log("Kalbe tıklandı! ID:", propertyId);
+
+            $.ajax({
+                url: '/Favorites/Toggle',
+                type: 'POST',
+                data: { propertyId: propertyId },
+                success: function (response) {
+                    if (response.success) {
+                        var icon = $(btnElement).find('i');
+                        if (response.status === "added") {
+                            icon.removeClass('bi-heart').addClass('bi-heart-fill');
+                            alert("Favorilere eklendi! ❤️");
+                        } else {
+                            icon.removeClass('bi-heart-fill').addClass('bi-heart');
+                            alert("Favorilerden çıkarıldı. 💔");
+                        }
+                    } else {
+                        alert("İşlem başarısız oldu.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Hata Detayı:", error);
+                    // Eğer kullanıcı giriş yapmamışsa veya hata varsa:
+                    alert("Favori işlemi için lütfen önce giriş yapın veya sayfayı yenileyin.");
+                }
+            });
+        }
     </script>
 }

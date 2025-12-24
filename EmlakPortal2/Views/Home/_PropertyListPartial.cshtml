@@ -2,34 +2,55 @@
 
 @foreach (var item in Model)
 {
-    <div class="col-md-4 col-sm-6 mb-4">
-        <div class="card h-100 shadow-sm">
-            @if (item.PropertyImages != null && item.PropertyImages.Count > 0)
-            {
-                <img src="@item.PropertyImages.FirstOrDefault().ImageUrl" class="card-img-top" alt="@item.Title" style="height: 200px; object-fit: cover;">
-            }
-            else
-            {
-                <img src="https://via.placeholder.com/300x200?text=Resim+Yok" class="card-img-top" style="height: 200px; object-fit: cover;">
-            }
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100 border-0">
+
+            <div style="position: relative;">
+
+                @if (item.PropertyImages != null && item.PropertyImages.Count > 0)
+                {
+                    <img src="@item.PropertyImages.First().ImageUrl" class="card-img-top" style="height: 250px; object-fit: cover;" alt="@item.Title">
+                }
+                else
+                {
+                    <img src="https://via.placeholder.com/500x400?text=Resim+Yok" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Resim Yok">
+                }
+
+                <span class="badge bg-primary position-absolute top-0 start-0 m-2">
+                    @(item.Category != null ? item.Category.Name : "Genel")
+                </span>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <button onclick="toggleFavorite(@item.Id, this)" class="btn btn-light rounded-circle position-absolute top-0 end-0 m-2 shadow-sm" style="z-index: 10; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-heart text-danger" style="font-size: 1.2rem;"></i>
+                    </button>
+                }
+                else
+                {
+                    <a href="/Identity/Account/Login" class="btn btn-light rounded-circle position-absolute top-0 end-0 m-2 shadow-sm" style="z-index: 10; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-heart text-muted" style="font-size: 1.2rem;"></i>
+                    </a>
+                }
+            </div>
 
             <div class="card-body">
-                <h5 class="card-title">@item.Title</h5>
-                <p class="card-text text-muted">
-                    <i class="bi bi-geo-alt-fill"></i> @item.Address
-                </p>
-                <p class="card-text">
-                    <span class="badge bg-info text-dark">@item.Category.Name</span>
-                    <span class="badge bg-secondary">@item.RoomCount Oda</span>
-                    <span class="badge bg-secondary">@item.Area m²</span>
-                </p>
-                <h6 class="text-primary fw-bold">
-                    @item.Price.ToString("c")
-                </h6>
+                <h5 class="card-title text-dark">@item.Title</h5>
+                <h4 class="text-primary fw-bold">@item.Price.ToString("c")</h4>
+                <p class="text-muted"><i class="bi bi-geo-alt"></i> @item.Address</p>
+
+                <div class="d-flex justify-content-between border-top pt-3">
+                    <span><i class="bi bi-door-open"></i> @item.RoomCount Oda</span>
+                    <span><i class="bi bi-arrows-fullscreen"></i> @item.Area m²</span>
+                </div>
             </div>
-            <div class="card-footer bg-white border-top-0">
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary w-100">Detayları Gör</a>
+
+            <div class="card-footer bg-white border-0 text-center pb-3">
+                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary w-100">
+                    Detayları Gör
+                </a>
             </div>
+
         </div>
     </div>
 }

@@ -16,6 +16,7 @@ namespace EmlakPortal2.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Property> Properties { get; set; }
         public DbSet<PropertyImage> PropertyImages { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
