@@ -10,39 +10,34 @@ namespace EmlakPortal2.Models
         public int Id { get; set; }
 
         [Required]
-        public string Title { get; set; } = string.Empty; // İlan Başlığı
+        public string Title { get; set; } = string.Empty; 
 
-        public string Description { get; set; } = string.Empty; // Açıklama
-
-        [Required]
-        public decimal Price { get; set; } // Fiyat
+        public string Description { get; set; } = string.Empty;
 
         [Required]
-        public int RoomCount { get; set; } // Oda Sayısı
-
+        public decimal Price { get; set; } 
         [Required]
-        public int Area { get; set; } // Metrekare
+        public int RoomCount { get; set; } 
+        [Required]
+        public int Area { get; set; } 
 
-        public string Address { get; set; } = string.Empty; // Adres
+        public string Address { get; set; } = string.Empty; 
 
-        public bool IsSold { get; set; } = false; // Satıldı mı/Kiralandı mı?
+        public bool IsSold { get; set; } = false; 
 
-        public DateTime CreatedDate { get; set; } = DateTime.Now; // İlan Tarihi
+        public DateTime CreatedDate { get; set; } = DateTime.Now; 
 
-        // İlişkiler: Hangi Kategori?
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
-        // İlişkiler: İlanı Ekleyen Kim?
         public string? AppUserId { get; set; }
         [ForeignKey("AppUserId")]
         public virtual AppUser AppUser { get; set; }
 
-        // Bir ilanın birden çok resmi olabilir
         public virtual ICollection<PropertyImage> PropertyImages { get; set; } = new List<PropertyImage>();
         [Display(Name = "Isıtma Tipi")]
-        public string IsitmaTipi { get; set; } // Örn: Kombi, Merkezi
+        public string IsitmaTipi { get; set; } 
 
         [Display(Name = "Eşyalı mı?")]
         public bool EsyaliMi { get; set; }
@@ -60,7 +55,7 @@ namespace EmlakPortal2.Models
         public int BalkonSayisi { get; set; }
 
         [Display(Name = "Kullanım Durumu")]
-        public string KullanimDurumu { get; set; } // Örn: Boş, Kiracılı
+        public string KullanimDurumu { get; set; } 
 
         [Display(Name = "Site İçerisinde mi?")]
         public bool SiteIcerisinde { get; set; }

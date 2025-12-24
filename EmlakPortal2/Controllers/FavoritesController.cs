@@ -20,15 +20,14 @@ namespace EmlakPortal2.Controllers
         // 1. KULLANICININ FAVORİLERİNİ LİSTELEME
         public IActionResult Index()
         {
-            // Şu anki giriş yapmış kullanıcının ID'sini bul
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var favorites = _context.Favorites
-                .Include(f => f.Property) // İlan detaylarını getir
-                .ThenInclude(p => p.Category) // Kategori adını da getir
-                .Include(f => f.Property.PropertyImages) // Resmini de getir
+                .Include(f => f.Property) 
+                .ThenInclude(p => p.Category) 
+                .Include(f => f.Property.PropertyImages) 
                 .Where(f => f.UserId == userId)
-                .Select(f => f.Property) // Bize sadece Property listesi lazım
+                .Select(f => f.Property) 
                 .ToList();
 
             return View(favorites);
@@ -40,20 +39,17 @@ namespace EmlakPortal2.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Önce veritabanına bak: Bu kullanıcı bu ilanı zaten favorilemiş mi?
             var existingFav = _context.Favorites
                 .FirstOrDefault(f => f.UserId == userId && f.PropertyId == propertyId);
 
             if (existingFav != null)
             {
-                // Zaten varsa FAVORİDEN ÇIKAR
                 _context.Favorites.Remove(existingFav);
                 _context.SaveChanges();
                 return Json(new { success = true, status = "removed" });
             }
             else
             {
-                // Yoksa FAVORİYE EKLE
                 var newFav = new Favorite
                 {
                     UserId = userId,

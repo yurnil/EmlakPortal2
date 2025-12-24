@@ -1,122 +1,213 @@
 ﻿@model Property
 
-<form method="post" enctype="multipart/form-data">
-    <div class="border p-3 mt-4">
-        <div class="row pb-2">
-            <h2 class="text-primary">Yeni İlan Ekle</h2>
-            <hr />
-        </div>
+@{
+    var indexUrl = Url.Action("Index", "Property", new { area = "Admin" });
+}
 
-        @* Resim Yükleme Alanı *@
-        <div class="mb-3">
-            <label>İlan Resimleri</label>
-            <input type="file" name="files" class="form-control" multiple />
-        </div>
+<style>
+    /* Slide-down animation from top */
+    .modal-dialog {
+        transform: translateY(-100vh);
+        transition: transform .35s ease-in-out;
+        max-width:900px;
+    }
+    .modal.show .modal-dialog {
+        transform: translateY(0);
+    }
+</style>
 
-        <div class="mb-3">
-            <label asp-for="Title">İlan Başlığı</label>
-            <input asp-for="Title" class="form-control" />
-            <span asp-validation-for="Title" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Description">Açıklama</label>
-            <textarea asp-for="Description" class="form-control"></textarea>
-        </div>
-
-        <div class="row">
-            <div class="col-6 mb-3">
-                <label asp-for="Price">Fiyat (TL)</label>
-                <input asp-for="Price" class="form-control" type="number" />
+<div class="modal fade" id="propertyCreateModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Yeni İlan Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
             </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label asp-for="IsitmaTipi" class="form-label">Isıtma Tipi</label>
-                    <input asp-for="IsitmaTipi" class="form-control" placeholder="Örn: Kombi, Merkezi" />
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label asp-for="KullanimDurumu" class="form-label">Kullanım Durumu</label>
-                    <input asp-for="KullanimDurumu" class="form-control" placeholder="Örn: Boş, Kiracılı" />
-                </div>
-            </div>
+            <div class="modal-body">
+                <form id="propertyCreateForm" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
 
-            <div class="row">
-                <div class="col-md-3 mb-3">
-                    <label asp-for="BinaYasi" class="form-label">Bina Yaşı</label>
-                    <input asp-for="BinaYasi" type="number" class="form-control" />
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label asp-for="BulunduguKat" class="form-label">Bulunduğu Kat</label>
-                    <input asp-for="BulunduguKat" type="number" class="form-control" />
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label asp-for="KatSayisi" class="form-label">Kat Sayısı</label>
-                    <input asp-for="KatSayisi" type="number" class="form-control" />
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label asp-for="BalkonSayisi" class="form-label">Balkon</label>
-                    <input asp-for="BalkonSayisi" type="number" class="form-control" />
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" asp-for="EsyaliMi">
-                        <label class="form-check-label" asp-for="EsyaliMi">Eşyalı mı?</label>
+                    @* Resim Yükleme Alanı *@
+                    <div class="mb-3">
+                        <label>İlan Resimleri</label>
+                        <input id="filesInput" type="file" name="files" class="form-control" multiple />
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" asp-for="SiteIcerisinde">
-                        <label class="form-check-label" asp-for="SiteIcerisinde">Site İçerisinde mi?</label>
+
+                    <div class="mb-3">
+                        <label asp-for="Title">İlan Başlığı</label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
-                </div>
-            </div>
-            <div class="col-6 mb-3">
-                <label asp-for="RoomCount">Oda Sayısı</label>
-                <input asp-for="RoomCount" class="form-control" type="number" />
+
+                    <div class="mb-3">
+                        <label asp-for="Description">Açıklama</label>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label asp-for="Price">Fiyat (TL)</label>
+                            <input asp-for="Price" class="form-control" type="number" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="IsitmaTipi" class="form-label">Isıtma Tipi</label>
+                                <input asp-for="IsitmaTipi" class="form-control" placeholder="Örn: Kombi, Merkezi" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="KullanimDurumu" class="form-label">Kullanım Durumu</label>
+                                <input asp-for="KullanimDurumu" class="form-control" placeholder="Örn: Boş, Kiracılı" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="BinaYasi" class="form-label">Bina Yaşı</label>
+                                <input asp-for="BinaYasi" type="number" class="form-control" />
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="BulunduguKat" class="form-label">Bulunduğu Kat</label>
+                                <input asp-for="BulunduguKat" type="number" class="form-control" />
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="KatSayisi" class="form-label">Kat Sayısı</label>
+                                <input asp-for="KatSayisi" type="number" class="form-control" />
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="BalkonSayisi" class="form-label">Balkon</label>
+                                <input asp-for="BalkonSayisi" type="number" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" asp-for="EsyaliMi">
+                                    <label class="form-check-label" asp-for="EsyaliMi">Eşyalı mı?</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" asp-for="SiteIcerisinde">
+                                    <label class="form-check-label" asp-for="SiteIcerisinde">Site İçerisinde mi?</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label asp-for="RoomCount">Oda Sayısı</label>
+                            <input asp-for="RoomCount" class="form-control" type="number" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label asp-for="Area">Metrekare (m²)</label>
+                            <input asp-for="Area" class="form-control" type="number" />
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label asp-for="CategoryId">Kategori</label>
+                            <select asp-for="CategoryId" asp-items="ViewBag.CategoryList" class="form-select">
+                                <option disabled selected>-- Kategori Seçiniz --</option>
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Address">Adres</label>
+                        <input asp-for="Address" class="form-control" />
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input asp-for="IsSold" class="form-check-input" type="checkbox" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Satıldı / Kiralandı mı?
+                        </label>
+                    </div>
+
+                    <div id="createAlerts"></div>
+
+                    <div class="d-flex justify-content-end">
+                        <button id="submitBtn" type="submit" class="btn btn-primary me-2">Oluştur</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    </div>
+                </form>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-6 mb-3">
-                <label asp-for="Area">Metrekare (m²)</label>
-                <input asp-for="Area" class="form-control" type="number" />
-            </div>
-            <div class="col-6 mb-3">
-                <label asp-for="CategoryId">Kategori</label>
-                <select asp-for="CategoryId" asp-items="ViewBag.CategoryList" class="form-select">
-                    <option disabled selected>-- Kategori Seçiniz --</option>
-                </select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Address">Adres</label>
-            <input asp-for="Address" class="form-control" />
-        </div>
-
-        <div class="form-check mb-3">
-            <input asp-for="IsSold" class="form-check-input" type="checkbox" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-                Satıldı / Kiralandı mı?
-            </label>
-        </div>
-
-        @* Şu an AppUser ID'yi otomatik alamadığımız için (Giriş yapmadık) gizli geçiyoruz *@
-        @* Normalde: User.Identity.GetUserId() kullanılır. Şimdilik boş geçebilir. *@
-
-        <button type="submit" class="btn btn-primary" style="width:150px">Oluştur</button>
-        <a asp-controller="Property" asp-action="Index" class="btn btn-secondary" style="width:150px">
-            Listeye Dön
-        </a>
     </div>
-</form>
+</div>
 
 @section Scripts {
     @{
         <partial name="_ValidationScriptsPartial" />
     }
+
+    <script>
+        // Show modal on page load and redirect to Index when closed
+        document.addEventListener('DOMContentLoaded', function () {
+            var modalEl = document.getElementById('propertyCreateModal');
+            var bsModal = new bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: false });
+            bsModal.show();
+
+            modalEl.addEventListener('hidden.bs.modal', function () {
+                window.location.href = '@indexUrl';
+            });
+
+            // Ajax submit logic (same as before)
+            $('#propertyCreateForm').on('submit', function (e) {
+                e.preventDefault();
+
+                var form = document.getElementById('propertyCreateForm');
+                var formData = new FormData(form);
+
+                var filesInput = document.getElementById('filesInput');
+                for (var i =0; i < filesInput.files.length; i++) {
+                    formData.append('files', filesInput.files[i]);
+                }
+
+                var token = $('input[name="__RequestVerificationToken"]').val();
+
+                $('#submitBtn').prop('disabled', true).text('Gönderiliyor...');
+                $('#createAlerts').html('');
+
+                $.ajax({
+                    url: window.location.pathname,
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('RequestVerificationToken', token);
+                    }
+                }).done(function (res) {
+                    if (res && res.success) {
+                        $('#createAlerts').html('<div class="alert alert-success">' + res.message + '</div>');
+                        setTimeout(function () { window.location.href = res.redirect; },900);
+                    } else {
+                        $('#createAlerts').html('<div class="alert alert-danger">Beklenmeyen cevap alındı.</div>');
+                        $('#submitBtn').prop('disabled', false).text('Oluştur');
+                    }
+                }).fail(function (xhr) {
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        var errHtml = '<div class="alert alert-danger"><ul>';
+                        var errors = xhr.responseJSON.errors;
+                        for (var i =0; i < errors.length; i++) {
+                            var e = errors[i];
+                            for (var j =0; j < e.errors.length; j++) {
+                                errHtml += '<li>' + e.errors[j] + '</li>';
+                            }
+                        }
+                        errHtml += '</ul></div>';
+                        $('#createAlerts').html(errHtml);
+                    } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                        $('#createAlerts').html('<div class="alert alert-danger">' + xhr.responseJSON.message + '</div>');
+                    } else {
+                        $('#createAlerts').html('<div class="alert alert-danger">Sunucu hatası oluştu.</div>');
+                    }
+                    $('#submitBtn').prop('disabled', false).text('Oluştur');
+                });
+            });
+        });
+    </script>
 }

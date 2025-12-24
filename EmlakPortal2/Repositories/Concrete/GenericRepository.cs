@@ -42,7 +42,6 @@ namespace EmlakPortal2.Repositories.Concrete
 
             if (includeProperties != null)
             {
-                // İlişkili tabloları dahil et (Örn: Category, Images)
                 foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProp);

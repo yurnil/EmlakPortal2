@@ -1,4 +1,4 @@
-﻿using EmlakPortal2.Data; // Veritabanı için şart
+﻿using EmlakPortal2.Data; 
 using EmlakPortal2.Models;
 using EmlakPortal2.Repositories.Abstract;
 using Microsoft.AspNetCore.Authorization;
@@ -14,15 +14,13 @@ namespace EmlakPortal2.Areas.Admin.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        // ACİL ÇÖZÜM: Veritabanına doğrudan erişim ekliyoruz
         private readonly ApplicationDbContext _context;
 
-        // Constructor'ı güncelledik: context'i de içeri alıyoruz
         public PropertyController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, ApplicationDbContext context)
         {
             _unitOfWork = unitOfWork;
             _webHostEnvironment = webHostEnvironment;
-            _context = context; // Veritabanı bağlantısını aldık
+            _context = context; 
         }
 
         public IActionResult Index()
@@ -52,6 +50,8 @@ namespace EmlakPortal2.Areas.Admin.Controllers
             ModelState.Remove("AppUser");
             ModelState.Remove("Category");
             ModelState.Remove("PropertyImages");
+
+            bool isAjax = string.Equals(Request.Headers["X-Requested-With"], "XMLHttpRequest", System.StringComparison.OrdinalIgnoreCase);
 
             if (ModelState.IsValid)
             {
@@ -84,7 +84,23 @@ namespace EmlakPortal2.Areas.Admin.Controllers
                 }
 
                 TempData["success"] = "İlan başarıyla oluşturuldu.";
+
+                if (isAjax)
+                {
+                    return Json(new { success = true, message = "İlan başarıyla oluşturuldu.", redirect = Url.Action("Index") });
+                }
+
                 return RedirectToAction("Index");
+            }
+
+            if (isAjax)
+            {
+                var errors = ModelState.Where(kvp => kvp.Value.Errors.Count >0)
+                .Select(kvp => new {
+                    key = kvp.Key,
+                    errors = kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                }).ToArray();
+                return BadRequest(new { success = false, message = "Doğrulama hatası.", errors });
             }
 
             IEnumerable<SelectListItem> categoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
@@ -118,14 +134,10 @@ namespace EmlakPortal2.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        // ---------------------------------------------------------
-        // --- İŞTE DÜZELTİLEN KISIM: EDIT İŞLEMLERİ (GARANTİLİ) ---
-        // ---------------------------------------------------------
 
         // Edit GET
         public IActionResult Edit(int id)
         {
-            // Veriyi doğrudan veritabanından çekiyoruz (UnitOfWork karıştırmadan)
             var property = _context.Properties.Find(id);
 
             if (property == null) return NotFound();
@@ -134,8 +146,7 @@ namespace EmlakPortal2.Areas.Admin.Controllers
             return View(property);
         }
 
-        // Edit POST (NÜKLEER YÖNTEM) ☢️
-        // Bu kod tüm güvenlik kurallarını (Validation) devre dışı bırakır ve kaydeder.
+        // Edit POST 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Property model)
@@ -159,11 +170,7 @@ namespace EmlakPortal2.Areas.Admin.Controllers
             dbItem.BalkonSayisi = model.BalkonSayisi;
             dbItem.KullanimDurumu = model.KullanimDurumu;
             dbItem.SiteIcerisinde = model.SiteIcerisinde;
-            // Metrekare varsa aç: dbItem.SquareMeters = model.SquareMeters;
 
-            // 3. BURASI ÇOK ÖNEMLİ!
-            // ModelState.IsValid kontrolünü SİLDİM.
-            // Yani "Hata var mı?" diye sormuyoruz, "KAYDET!" diye emrediyoruz.
 
             try
             {
@@ -173,7 +180,6 @@ namespace EmlakPortal2.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                // Eğer veritabanı patlarsa hatayı ekrana basarız
                 return Content("HATA OLUŞTU: " + ex.Message);
             }
         }

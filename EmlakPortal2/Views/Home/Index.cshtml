@@ -22,7 +22,6 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // FİLTRELEME KODLARI (Senin eski kodların)
             $(".filter-btn").click(function () {
                 var catId = $(this).data("id");
                 $(".filter-btn").removeClass("btn-dark").addClass("btn-outline-dark");
@@ -42,10 +41,9 @@
             });
         });
 
-        // --- FAVORİ KODU (Global Fonksiyon) ---
         function toggleFavorite(propertyId, btnElement) {
 
-            // Tıklanma testi
+            
             console.log("Kalbe tıklandı! ID:", propertyId);
 
             $.ajax({
@@ -68,7 +66,6 @@
                 },
                 error: function (xhr, status, error) {
                     console.error("Hata Detayı:", error);
-                    // Eğer kullanıcı giriş yapmamışsa veya hata varsa:
                     alert("Favori işlemi için lütfen önce giriş yapın veya sayfayı yenileyin.");
                 }
             });

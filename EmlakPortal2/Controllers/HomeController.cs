@@ -21,14 +21,11 @@ namespace EmlakPortal2.Controllers
             _hubContext = hubContext;
         }
 
-        // ANASAYFA (Hem normal açýlýþ hem de butonlar için kategorileri hazýrlar)
         public IActionResult Index()
         {
-            // 1. Kategorileri View'a taþý (Butonlar için)
             var categories = _unitOfWork.Category.GetAll();
             ViewBag.Categories = categories;
 
-            // 2. Ýlanlarý Getir
             var propertyList = _unitOfWork.Property.GetAll(includeProperties: "Category,PropertyImages");
             return View(propertyList);
         }
@@ -41,32 +38,37 @@ namespace EmlakPortal2.Controllers
 
             if (categoryId == null || categoryId == 0)
             {
-                // Kategori seçilmediyse hepsini getir
                 propertyList = _unitOfWork.Property.GetAll(includeProperties: "Category,PropertyImages");
             }
             else
             {
-                // Seçilen kategoriye göre filtrele
                 propertyList = _unitOfWork.Property.GetAll(u => u.CategoryId == categoryId, includeProperties: "Category,PropertyImages");
             }
 
             return PartialView("_PropertyListPartial", propertyList);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == 0) return NotFound();
 
-            // HATA BURADAYDI: .Include yerine .GetAll içinde týrnakla yazýyoruz.
-            // Hem kategoriyi hem de resimleri ("Category,PropertyImages") getir diyoruz.
             var property = _unitOfWork.Property
                 .GetAll(p => p.Id == id, includeProperties: "Category,PropertyImages")
                 .FirstOrDefault();
 
             if (property == null) return NotFound();
 
-            // (Eðer SignalR kodlarýn varsa burada durabilir, silmene gerek yok)
-            // _hubContext.Clients.All...
+            try
+            {
+                var userName = User?.Identity?.IsAuthenticated == true ? User.Identity.Name : "Ziyaretçi";
+                var message = $"\"{property.Title}\" ilaný görüntülendi. (ID: {property.Id})";
+
+                await _hubContext.Clients.All.SendAsync("ReceiveMessage", userName, message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "SignalR gönderimi baþarýsýz: {Message}", ex.Message);
+            }
 
             return View(property);
         }

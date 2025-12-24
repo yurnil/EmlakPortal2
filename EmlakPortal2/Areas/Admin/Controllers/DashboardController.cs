@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using EmlakPortal2.Repositories.Abstract; // IUnitOfWork için
+using EmlakPortal2.Repositories.Abstract; 
 
 namespace EmlakPortal2.Areas.Admin.Controllers
 {
@@ -17,11 +17,9 @@ namespace EmlakPortal2.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            // İstatistikleri toplayalım
             ViewBag.KategoriSayisi = _uow.Category.GetAll().Count();
             ViewBag.IlanSayisi = _uow.Property.GetAll().Count();
 
-            // Eğer User tablosuna erişim repository'de yoksa şimdilik sadece bunları saydırıyoruz.
 
             return View();
         }

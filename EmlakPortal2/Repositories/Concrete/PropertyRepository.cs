@@ -18,7 +18,5 @@ namespace EmlakPortal2.Repositories.Concrete
             _db.SaveChanges();
         }
 
-        // Update metodu GenericRepository'den geliyor, buraya tekrar yazmıyoruz.
-        // Böylece çakışma olmuyor.
     }
 }

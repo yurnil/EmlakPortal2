@@ -52,10 +52,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication(); // Kimlik Doğrulama
-app.UseAuthorization();  // Yetkilendirme
+app.UseAuthentication(); 
+app.UseAuthorization();  
 
-// Rotalar
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
@@ -64,7 +63,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages(); // Login sayfalarının çalışması için şart
+app.MapRazorPages(); 
 app.MapHub<EmlakPortal2.Hubs.GeneralHub>("/general-hub");
 using (var scope = app.Services.CreateScope())
 {
